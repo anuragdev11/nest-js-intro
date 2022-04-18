@@ -19,6 +19,7 @@ export class ProductsController{
         return {status:200, id: generatedId };  
 
     }
+    
 
     //For get request to view all data we need to add products/show in the URL.
     @Get('show')
