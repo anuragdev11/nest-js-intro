@@ -6,12 +6,12 @@ export class ProductsController{
     
     //For post requests we need to add products/insert in the url
     @Post('insert')
-    addProduct(
+    async addProduct(
         @Body('title') prodTitle: string, 
         @Body('description') prodDesc: string, 
         @Body('price') prodPrice : number
     ) {
-        const generatedId= this.productService.insertProduct(
+        const generatedId= await this.productService.insertProduct(
             prodTitle, 
             prodDesc, 
             prodPrice
@@ -23,8 +23,10 @@ export class ProductsController{
 
     //For get request to view all data we need to add products/show in the URL.
     @Get('show')
-    getAllProducts(){
-        return {status:200,data:this.productService.getProducts()};
+    async getAllProducts(){
+        const products = await this.productService.getProducts();
+        const result = {status: 200, data:[products]};
+        return result
     }
 
     @Get(':id')
@@ -33,20 +35,20 @@ export class ProductsController{
     }
 
     @Patch(':id')
-    updateProduct(
+    async updateProduct(
         @Param('id') prodID : string,
         @Body('title') prodTitle : string,
         @Body('description') prodDesc : string,
         @Body('price') prodPrice : number
     ){
-        this.productService.updateProduct(prodID, prodTitle, prodDesc, prodPrice);
+        await this.productService.updateProduct(prodID, prodTitle, prodDesc, prodPrice);
         return {status:200, msg:"Updated Successfully."}       
 
     }
 
     @Delete(':id')
-    deleteProduct(@Param('id') prodId : string){
-        this.productService.removeProduct(prodId);
+    async deleteProduct(@Param('id') prodId : string){
+        await this.productService.removeProduct(prodId);
         return {status:200, msg:"Deleted Successfully."}
     }
 }
